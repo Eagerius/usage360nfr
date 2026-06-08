@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>USAGE360 — Field Performance (Print)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1628;--ink-2:#2F2C3C;--ink-3:#716E79;--muted:#B2B0B6;--muted-2:#DEDCDE;
+    --border:#E5E7EB;--border-2:#EEECEF;--bg:#FFFFFF;--bg-app:#F5F5F7;--bg-2:#FAFAFB;--bg-strip:#F4F3F3;
+    --orange:#DB6C03;--orange-soft:#FDF1E4;--pink:#ED39DB;--blue:#41AFFF;--blue-2:#3287C4;
+    --blue-deep:#2A71A4;--blue-soft:#EAF4FC;--purple:#8D38FC;--purple-soft:#F3E9FD;--indigo:#686EFF;
+    --green:#5AD767;--green-soft:#E7F8EA;--yellow:#FFC62B;--teal:#2A71A4;--teal-deep:#0A6E5E;
+    --teal-soft:#E3F2EE;--navy:#022D42;--danger:#B21111;--danger-soft:#FDECEC;--warn:#B58103;--warn-soft:#FFF6E1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#fff;margin:0;padding:0}
+  body{font-family:"Open Sans",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  @media print{
+    @page{size:landscape;margin:0.4cm}
+    body{background:#fff}
+    .page-break{break-before:page}
+    .no-break{break-inside:avoid}
+  }
+
+  .app{width:1440px;margin:0 auto;background:#fff}
+
+  /* Topbar */
+  .topbar{height:56px;display:flex;align-items:center;background:#fff;border-bottom:1px solid var(--border);padding-right:16px}
+  .topbar .brand{width:96px;height:56px;background:var(--orange);color:#fff;font-weight:800;font-size:14px;letter-spacing:.03em;display:flex;align-items:center;justify-content:center}
+  .topbar .crumbs{display:flex;align-items:center;padding:0 20px;gap:10px;font-size:14px;color:var(--ink-2);font-weight:600}
+  .topbar .crumbs .active{color:var(--ink)}
+  .topbar .spacer{flex:1}
+  .topbar .stamp{font-size:12px;color:var(--ink-3);font-style:italic;margin-right:16px;font-family:Inter,sans-serif}
+  .topbar .tbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;font-size:13px;font-family:Inter,sans-serif;color:var(--ink-2);border-radius:6px;height:36px;border:none;background:transparent}
+  .topbar .tbtn.primary{background:var(--teal-deep);color:#fff;padding:0 16px;font-weight:600}
+  .topbar .tbtn svg{width:15px;height:15px}
+  .topbar .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#E89141);color:#fff;font-weight:700;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-left:12px;font-family:Inter,sans-serif}
+  .topbar .divider{width:1px;height:24px;background:var(--border);margin:0 6px}
+
+  /* Page header */
+  .pageheader{background:#fff;border-bottom:1px solid var(--border);padding:0 24px}
+  .depttabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-left:-24px;margin-right:-24px;padding:0 24px;background:var(--bg-2)}
+  .depttab{padding:12px 18px 14px;font-size:14px;font-weight:600;color:var(--ink-3);display:inline-flex;align-items:center;gap:8px;border-bottom:3px solid transparent;margin-bottom:-1px;font-family:Inter,sans-serif}
+  .depttab .code{font-family:"Open Sans";font-weight:700;font-size:13px;background:var(--bg-app);padding:2px 8px;border-radius:4px;color:var(--ink-2);letter-spacing:0.02em}
+  .depttab.active{color:var(--navy);border-bottom-color:var(--orange)}
+  .depttab.active .code{background:var(--orange-soft);color:var(--orange)}
+  .titlerow{display:flex;align-items:baseline;gap:14px;margin:18px 0}
+  .titlerow h1{font-size:28px;font-weight:800;letter-spacing:-0.02em;color:var(--navy)}
+  .titlerow .sub{font-size:14px;color:var(--ink-3);font-family:Inter,sans-serif}
+  .titlerow .sub b{color:var(--ink);font-weight:600}
+
+  .main{padding:20px 24px}
+
+  /* KPI row */
+  .kpirow{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px}
+  .kpi{background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 18px;position:relative;overflow:hidden}
+  .kpi.featured{background:linear-gradient(135deg,#022D42 0%,#0A4D6E 100%);color:#fff;border-color:var(--navy)}
+  .kpi.featured .name,.kpi.featured .sub{color:rgba(255,255,255,.82)}
+  .kpi .name{font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;font-family:Inter,sans-serif}
+  .kpi .numrow{display:flex;align-items:baseline;gap:8px;margin-top:8px}
+  .kpi .num{font-size:28px;font-weight:800;letter-spacing:-0.02em;line-height:1;color:var(--ink)}
+  .kpi.featured .num{color:#fff}
+  .kpi .unit{font-size:14px;color:var(--ink-3);font-weight:500}
+  .kpi .delta{display:inline-flex;align-items:center;gap:2px;font-size:12px;font-weight:700;font-family:Inter,sans-serif;padding:2px 6px;border-radius:4px}
+  .kpi .delta.up{color:var(--teal-deep);background:var(--teal-soft)}
+  .kpi .delta.down{color:var(--danger);background:var(--danger-soft)}
+  .kpi .delta.flat{color:var(--ink-3);background:var(--bg-app)}
+  .kpi.featured .delta.up{background:rgba(90,215,103,.2);color:#9BF0A5}
+  .kpi .sub{font-size:11px;color:var(--ink-3);margin-top:4px;font-family:Inter,sans-serif}
+  .kpi .spark{position:absolute;right:10px;bottom:10px;opacity:.6}
+
+  /* Split */
+  .split{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;margin-bottom:20px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .card-hdr{display:flex;align-items:center;gap:12px;padding:16px 20px 0}
+  .card-hdr h3{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+  .card-hdr .hint{font-size:12px;color:var(--ink-3);font-family:Inter,sans-serif}
+  .card-hdr .spacer{flex:1}
+  .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;font-family:Inter,sans-serif;background:var(--bg-app);color:var(--ink-2)}
+  .chip.live{background:var(--teal-soft);color:var(--teal-deep)}
+  .chip.live .pulse{width:6px;height:6px;border-radius:50%;background:var(--teal-deep)}
+
+  .nfrmain{padding:18px 20px 20px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:start}
+  .nfrscore .delta{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--teal-deep);background:var(--teal-soft);padding:4px 10px;border-radius:14px;margin-top:8px;font-family:Inter,sans-serif}
+  .nfrscore .meta{font-size:11px;color:var(--ink-3);margin-top:12px;line-height:1.5;font-family:Inter,sans-serif}
+  .nfrscore .meta b{color:var(--ink)}
+  .nfrright{min-width:0}
+  .nfrtabs{display:inline-flex;border:1px solid var(--border);border-radius:6px;padding:2px;background:var(--bg-2);margin-bottom:8px}
+  .nfrtabs span{padding:5px 12px;font-size:12px;color:var(--ink-3);border-radius:4px;font-family:Inter,sans-serif;font-weight:500}
+  .nfrtabs span.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.05);font-weight:600}
+  .legend{display:flex;gap:18px;font-size:12px;color:var(--ink-2);font-family:Inter,sans-serif}
+  .legend .item{display:inline-flex;align-items:center;gap:6px}
+  .legend .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .legend .line{width:14px;height:2px;border-radius:1px;flex-shrink:0}
+  .ring-bg{stroke:#F0F0F2}
+
+  /* Catchup */
+  .catchup{display:flex;flex-direction:column}
+  .catchup .tabrow{display:flex;gap:4px;padding:12px 16px 0;border-bottom:1px solid var(--border)}
+  .catchup .tab{padding:10px 12px;font-size:13px;font-weight:600;color:var(--ink-3);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:6px}
+  .catchup .tab.on{color:var(--ink);border-bottom-color:var(--orange)}
+  .catchup .tab .count{background:var(--orange-soft);padding:1px 7px;border-radius:10px;font-size:11px;color:var(--orange);font-weight:700}
+  .alertlist{padding:4px 6px}
+  .alertitem{display:flex;gap:10px;padding:10px 14px;border-radius:6px;align-items:flex-start}
+  .alertitem .icon{width:28px;height:28px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .alertitem.danger .icon{background:var(--danger-soft);color:var(--danger)}
+  .alertitem.warn .icon{background:var(--warn-soft);color:var(--warn)}
+  .alertitem.info .icon{background:var(--blue-soft);color:var(--blue-2)}
+  .alertitem .txt{flex:1;min-width:0}
+  .alertitem .title{font-size:13px;color:var(--ink);font-weight:600;font-family:Inter,sans-serif;line-height:1.3}
+  .alertitem .meta{font-size:11px;color:var(--ink-3);margin-top:2px;font-family:Inter,sans-serif}
+
+  /* Client cards */
+  .clientheader{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .clientheader h2{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+  .clientheader .count-pill{background:#fff;border:1px solid var(--border);padding:4px 10px;border-radius:14px;font-size:12px;color:var(--ink-2);font-weight:600;font-family:Inter,sans-serif}
+
+  .clientcard{background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+  .clientcard.alert{border-color:var(--danger)}
+  .clientcard.alert .ch-strip{background:linear-gradient(90deg,var(--danger-soft),#fff)}
+  .ch-strip{padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border-2)}
+  .ch-logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#F4F3F5,#E5E7EB);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink-2);font-size:13px;font-family:Inter,sans-serif;flex-shrink:0}
+  .clientcard.alert .ch-logo{background:linear-gradient(135deg,#FCDCDC,#FDECEC);border-color:#F1B9B9;color:var(--danger)}
+  .ch-meta{flex:1;min-width:0}
+  .ch-name{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;line-height:1.2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ch-tags{display:flex;gap:8px;margin-top:4px;font-size:11px;color:var(--ink-3);font-family:Inter,sans-serif;flex-wrap:wrap}
+  .ch-tags .tag{padding:2px 8px;background:var(--bg-app);border-radius:10px;color:var(--ink-2)}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.06em;border-radius:12px;padding:3px 10px;white-space:nowrap;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:4px}
+  .badge.danger{background:var(--danger);color:#fff}
+  .badge.ok{background:var(--teal-soft);color:var(--teal-deep)}
+
+  .metricsrow{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:1px solid var(--border-2)}
+  .metric{padding:14px 20px;display:flex;align-items:center;gap:12px;border-right:1px solid var(--border-2)}
+  .metric:last-child{border-right:none}
+  .metric .ico{width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .metric.m-inst .ico{background:var(--purple-soft);color:var(--purple)}
+  .metric.m-team .ico{background:#EAE9FF;color:var(--indigo)}
+  .metric.m-user .ico{background:var(--orange-soft);color:var(--orange)}
+  .metric .tcol{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+  .metric .tlbl{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;font-family:Inter,sans-serif}
+  .metric .tval{display:flex;align-items:baseline;gap:8px}
+  .metric .tnum{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;line-height:1}
+  .metric .tsub{font-size:11px;color:var(--ink-3);font-family:Inter,sans-serif}
+  .metric .dtag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;font-family:Inter,sans-serif}
+  .metric .dtag.up{background:var(--teal-soft);color:var(--teal-deep)}
+  .metric .dtag.down{background:var(--danger-soft);color:var(--danger)}
+  .metric .dtag.flat{background:var(--bg-app);color:var(--ink-3)}
+
+  .chartsrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+  .chartcell{padding:14px 18px;border-right:1px solid var(--border-2);display:flex;flex-direction:column;gap:6px;min-width:0}
+  .chartcell:last-child{border-right:none}
+  .cc-hdr{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .cc-ttl{font-size:13px;font-weight:700;color:var(--ink)}
+
+  .insightbar{padding:12px 20px;background:var(--bg-2);display:flex;gap:12px;align-items:center;border-top:1px solid var(--border-2);font-size:13px;color:var(--ink-2);font-family:Inter,sans-serif}
+  .insightbar .ilab{font-weight:700;color:var(--ink);background:#fff;padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-family:Inter,sans-serif}
+
+  .footer{margin:8px 24px 24px;padding:18px 24px;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-3);font-family:Inter,sans-serif;flex-wrap:wrap;gap:12px}
+  .footer .left{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .footer .status{display:inline-flex;align-items:center;gap:8px;color:var(--teal-deep);font-weight:600}
+  .footer .status .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(90,215,103,.22)}
+  .footer .sep{color:var(--muted)}
+  .footer a{color:var(--teal-deep);text-decoration:none;font-weight:600}
+
+  .chart-svg text{font-family:Inter,sans-serif;fill:var(--ink-3);font-size:10px}
+  .chart-svg .axis-label{fill:var(--ink-2);font-size:10px;font-weight:500}
+  .tip{display:none}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="charts.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel">
+const {useState, useMemo, useRef, useEffect} = React;
+
+function Ico({name, size=16, color="currentColor", stroke=2}){
+  const c = {width:size, height:size, viewBox:"0 0 24 24", fill:"none", stroke:color, strokeWidth:stroke, strokeLinecap:"round", strokeLinejoin:"round"};
+  switch(name){
+    case "sync": return <svg {...c}><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0115-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 01-15 6.7L3 16"/></svg>;
+    case "eye": return <svg {...c}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>;
+    case "download": return <svg {...c}><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
+    case "chevron-right": return <svg {...c}><polyline points="9 18 15 12 9 6"/></svg>;
+    case "arrow-up": return <svg {...c} strokeWidth="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>;
+    case "arrow-down": return <svg {...c} strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>;
+    case "alert": return <svg {...c} strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
+    case "info": return <svg {...c}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>;
+    case "check": return <svg {...c} strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>;
+    case "server": return <svg {...c}><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>;
+    case "layers": return <svg {...c}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+    case "users": return <svg {...c}><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>;
+    default: return null;
+  }
+}
+
+function Delta({dir, value}){
+  if(!value || value==="-") return <span className="delta flat">—</span>;
+  const iconName = dir==="up"?"arrow-up":dir==="down"?"arrow-down":null;
+  return <span className={"delta "+dir}>{iconName && <Ico name={iconName} size={10} stroke={3}/>}{value}</span>;
+}
+function Dtag({dir, value}){
+  if(!value || value==="-") return <span className="dtag flat">—</span>;
+  return <span className={"dtag "+dir}>{value}</span>;
+}
+
+function RiskRing({value, max=100, size=96, stroke=10, color="#0A6E5E"}){
+  const r=(size-stroke)/2, c=2*Math.PI*r, pct=Math.min(value/max,1), offset=c*(1-pct);
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" strokeWidth={stroke} className="ring-bg"/>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" strokeWidth={stroke} stroke={color}
+              strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
+              transform={`rotate(-90 ${size/2} ${size/2})`}/>
+      <text x={size/2} y={size/2-2} textAnchor="middle" fill="#1A1628" style={{font:"800 22px 'Open Sans'",letterSpacing:"-0.02em"}}>{value}</text>
+      <text x={size/2} y={size/2+16} textAnchor="middle" fill="#716E79" style={{font:"600 10px Inter",letterSpacing:"0.04em"}}>OF {max}</text>
+    </svg>
+  );
+}
+
+function Sparkline({values, color="#3287C4", w=80, h=28}){
+  const pad=2, min=Math.min(...values), max=Math.max(...values), range=max-min||1;
+  const step=(w-pad*2)/(values.length-1);
+  const pts=values.map((v,i)=>[pad+i*step, h-pad-((v-min)/range)*(h-pad*2)]);
+  const d=pts.map((p,i)=>`${i?"L":"M"} ${p[0]} ${p[1]}`).join(" ");
+  return <svg width={w} height={h}><path d={d} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx={pts[pts.length-1][0]} cy={pts[pts.length-1][1]} r="2.5" fill={color}/></svg>;
+}
+
+function PrintApp(){
+  const sparks = [
+    {vals:[55,58,57,60,61,62], color:"#5AD767"},
+    {vals:[1,2,2,3,3,3], color:"#DB6C03"},
+    {vals:[87,88,86,85,84,83.5], color:"#B21111"},
+    {vals:[38,40,42,45,48,50], color:"#8D38FC"},
+    {vals:[1080,1090,1100,1110,1140,1150], color:"#686EFF"},
+    {vals:[4.7,4.9,5.0,5.1,5.2,5.3], color:"#DB6C03"},
+  ];
+  const alerts = [
+    {kind:"danger", title:<span><b>Lilly_001</b> projected to breach in ~9 days.</span>, meta:"NFR threshold · high severity"},
+    {kind:"warn",   title:<span><b>3 clients</b> likely to breach within 14 days.</span>, meta:"Projected usage trend"},
+    {kind:"warn",   title:<span><b>2 new clients</b> entered high-risk zone.</span>, meta:"Crossed 80% capacity"},
+    {kind:"info",   title:<span>Customer address table superseded records growing 12% WoW.</span>, meta:"Optimization recommended"},
+    {kind:"info",   title:<span><b>205M</b> inactive custom-field records flagged for cleanup.</span>, meta:"Resolves API timeouts"},
+  ];
+  const mIcons = ["server","layers","users"];
+  const mKinds = ["m-inst","m-team","m-user"];
+
+  return (
+    <div className="app">
+      {/* TOPBAR */}
+      <div className="topbar">
+        <div className="brand">USAGE360</div>
+        <div className="crumbs">
+          <span>NFR Monitor</span>
+          <Ico name="chevron-right" size={12} color="#B2B0B6"/>
+          <span className="active">System Overview</span>
+        </div>
+        <div className="spacer"/>
+        <div className="stamp">Last sync: Apr 24, 2026 · 14:30</div>
+        <div className="tbtn primary"><Ico name="sync" size={14}/> Sync Data</div>
+        <div className="tbtn"><Ico name="eye" size={14}/> Watchlist</div>
+        <div className="tbtn"><Ico name="download" size={14}/> Export</div>
+        <div className="divider"/>
+        <div className="avatar">RK</div>
+      </div>
+
+      {/* PAGE HEADER */}
+      <div className="pageheader">
+        <div className="depttabs">
+          {DEPARTMENTS.map(d=>(
+            <div key={d.id} className={"depttab"+(d.id==="ZFP"?" active":"")}>
+              <span className="code">{d.id}</span>
+              <span>{d.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="titlerow">
+          <h1>Field Performance</h1>
+          <span className="sub">Real-time visibility across <b>62 clients</b> and <b>236 instances</b></span>
+        </div>
+      </div>
+
+      {/* MAIN */}
+      <div className="main">
+        {/* KPI Strip */}
+        <div className="kpirow no-break">
+          {KPIS.map((k,i)=>(
+            <div key={i} className={"kpi"+(i===0?" featured":"")}>
+              <div className="name">{k.name}</div>
+              <div className="numrow">
+                <span className="num">{k.num}</span>
+                {k.num==="62"&&<span className="unit" style={i===0?{color:"rgba(255,255,255,.7)"}:{}}>/ 100</span>}
+                <Delta dir={k.deltaDir} value={k.delta}/>
+              </div>
+              {k.sub && <div className="sub">{k.sub}</div>}
+              <div className="spark"><Sparkline values={sparks[i].vals} color={i===0?"#5AD767":sparks[i].color}/></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Split: NFR + Catchup */}
+        <div className="split no-break">
+          <div className="card">
+            <div className="card-hdr">
+              <h3>System NFR Health</h3>
+              <span className="hint">Normalized Volume Index</span>
+              <div className="spacer"/>
+              <span className="chip live"><span className="pulse"/>Live</span>
+            </div>
+            <div className="nfrmain">
+              <div className="nfrscore">
+                <RiskRing value={62} max={100} color="#0A6E5E"/>
+                <div className="delta" style={{marginTop:10}}><Ico name="arrow-up" size={10} stroke={3}/>+3.2 vs last period</div>
+                <div className="meta">
+                  <div><b>Status:</b> Healthy</div>
+                  <div><b>Threshold:</b> 75 / 100</div>
+                  <div><b>Next review:</b> May 15</div>
+                </div>
+              </div>
+              <div className="nfrright">
+                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
+                  <div className="nfrtabs">
+                    <span>3M</span><span className="on">6M</span><span>12M</span><span>YTD</span>
+                  </div>
+                  <div className="spacer" style={{flex:1}}/>
+                  <div className="legend">
+                    <span className="item"><span className="line" style={{background:"#3287C4"}}/>Observed Usage</span>
+                    <span className="item"><span className="line" style={{background:"#8D38FC"}}/>Approved Capacity</span>
+                  </div>
+                </div>
+                <NFRAreaChart observed={NFR_SERIES.observed} approved={NFR_SERIES.approved}/>
+              </div>
+            </div>
+          </div>
+          <div className="card catchup">
+            <div className="card-hdr" style={{paddingBottom:0}}>
+              <h3>Quick Catchup</h3>
+            </div>
+            <div className="tabrow">
+              <div className="tab on">Alerts <span className="count">5</span></div>
+              <div className="tab">Activity <span className="count" style={{background:"var(--bg-app)",color:"var(--ink-2)"}}>3</span></div>
+            </div>
+            <div className="alertlist">
+              {alerts.map((a,i)=>(
+                <div key={i} className={"alertitem "+a.kind}>
+                  <div className="icon"><Ico name={a.kind==="info"?"info":"alert"} size={14}/></div>
+                  <div className="txt">
+                    <div className="title">{a.title}</div>
+                    <div className="meta">{a.meta}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Client Data */}
+        <div className="clientheader no-break">
+          <h2>Client Data</h2>
+          <span className="count-pill">{CLIENTS.length} of {CLIENTS.length}</span>
+        </div>
+
+        {CLIENTS.map((c,ci)=>(
+          <div key={c.id} className={"clientcard no-break"+(c.alert?" alert":"")} style={ci>0?{breakBefore:"auto"}:{}}>
+            <div className="ch-strip">
+              <div className="ch-logo">{c.logo}</div>
+              <div className="ch-meta">
+                <div className="ch-name">
+                  <span>{c.name}</span>
+                  {c.alert && <span className="badge danger"><Ico name="alert" size={10}/> APPROACHING LIMIT</span>}
+                  {!c.alert && <span className="badge ok"><Ico name="check" size={10}/> HEALTHY</span>}
+                </div>
+                <div className="ch-tags">
+                  <span className="tag">ID: {c.id.toUpperCase()}</span>
+                  <span className="tag">Release R-2026.3</span>
+                  <span className="tag">{c.stats[0].n} instances</span>
+                  <span className="tag">Renewal: Q3 2026</span>
+                </div>
+              </div>
+            </div>
+            <div className="metricsrow">
+              {c.stats.map((s,i)=>(
+                <div key={i} className={"metric "+mKinds[i]}>
+                  <div className="ico"><Ico name={mIcons[i]} size={18}/></div>
+                  <div className="tcol">
+                    <div className="tlbl">{s.l}</div>
+                    <div className="tval">
+                      <span className="tnum">{s.n}</span>
+                      <Dtag dir={s.dir} value={s.d}/>
+                    </div>
+                    <div className="tsub">{s.s}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="chartsrow">
+              <div className="chartcell">
+                <div className="cc-hdr"><div className="cc-ttl">Client Overview</div></div>
+                <MultiLineChart series={[c.overview.instances,c.overview.teams,c.overview.users]}
+                  colors={["#ED39DB","#686EFF","#DB6C03"]} labels={["Instances","Teams","Users"]} yLabel="Parameters"/>
+                <div className="legend" style={{marginTop:4,justifyContent:"center"}}>
+                  <span className="item"><span className="dot" style={{background:"#ED39DB"}}/>Instances</span>
+                  <span className="item"><span className="dot" style={{background:"#686EFF"}}/>Teams</span>
+                  <span className="item"><span className="dot" style={{background:"#DB6C03"}}/>Users</span>
+                </div>
+              </div>
+              <div className="chartcell">
+                <div className="cc-hdr"><div className="cc-ttl">Breach Trend</div></div>
+                <BreachBarChart bars={c.breach.bars} threshold={c.breach.threshold}/>
+                <div className="legend" style={{marginTop:4,justifyContent:"center"}}>
+                  <span className="item"><span className="line" style={{background:"#DB6C03"}}/>Threshold</span>
+                  <span className="item"><span className="dot" style={{background:"#3287C4"}}/>Instance Health</span>
+                </div>
+              </div>
+              <div className="chartcell">
+                <div className="cc-hdr"><div className="cc-ttl">Adoption Trend</div></div>
+                <AdoptionLineChart values={c.adoption}/>
+                <div className="legend" style={{marginTop:4,justifyContent:"center"}}>
+                  <span className="item"><span className="dot" style={{background:"#41AFFF"}}/>Adoption Rate</span>
+                </div>
+              </div>
+            </div>
+            <div className="insightbar">
+              <span className="ilab">Quick Insight</span>
+              <span>{c.insight}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="footer">
+        <div className="left">
+          <span className="status"><span className="dot"/>System Operational</span>
+          <span className="sep">•</span>
+          <span>Data refreshed 2 mins ago</span>
+          <span className="sep">•</span>
+          <span>62 clients · 236 instances tracked</span>
+        </div>
+        <div className="left">
+          <a href="#">Feedback</a>
+          <span className="sep">·</span>
+          <a href="#">Support</a>
+          <span className="sep">·</span>
+          <a href="#">Documentation</a>
+          <span className="sep">·</span>
+          <span>© 2026 ZS · Internal Use</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<PrintApp/>);
+
+// Auto-print after everything is ready
+document.fonts.ready.then(()=>{
+  setTimeout(()=>{ window.print(); }, 500);
+});
+</script>
+</body>
+</html>
